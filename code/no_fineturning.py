@@ -2,7 +2,7 @@ import numpy as np
 from keras.models import load_model
 from sklearn.preprocessing import StandardScaler
 
-# CWRU 4分类工况
+# Condições de classificação CWRU 4
 def CWRU_work_condition_data_4class(frame_size, step, data_size, path_list):
     ball, inner, outer_cen, normal = [], [], [], []
     work1 = np.loadtxt('./data/' + path_list[0])
@@ -23,7 +23,7 @@ def CWRU_work_condition_data_4class(frame_size, step, data_size, path_list):
     labels[3 * data_size:, 3] = 1
 
     return data, labels
-# CWRU 6分类工况
+# Condições de classificação CWRU 6
 def CWRU_work_condition_data_6class(frame_size, step, data_size, path_list):
     ball, inner, outer_cen, outer_opp, outer_orth, normal = [], [], [], [], [], []
     work1 = np.loadtxt('./data/' + path_list[0])
@@ -51,7 +51,7 @@ def CWRU_work_condition_data_6class(frame_size, step, data_size, path_list):
 
     return data, labels
 
-# gear 6分类的工况
+# Condições de classificação da engrenagem 6
 def gear_work_condition_data_6class(frame_size, step, data_size, path_list):
     helical1, helical2, helical3, helical4, helical5, helical6, = [], [], [], [], [], []
     work1 = np.loadtxt('./data/' + path_list[0])[:, 1]
@@ -78,7 +78,7 @@ def gear_work_condition_data_6class(frame_size, step, data_size, path_list):
     labels[5 * data_size:, 5] = 1
 
     return data, labels
-# gear 8分类的工况
+# Condições de classificação da engrenagem 8
 def gear_work_condition_data_8class(frame_size, step, data_size, path_list):
     spur1, spur2, spur3, spur4, spur5, spur6,spur7, spur8 = [], [], [], [], [], [], [], []
     work1 = np.loadtxt('./data/' + path_list[0])[:, 1]
@@ -170,12 +170,12 @@ frame_size = 1000
 step = 50
 data_size = 400
 class_num = 6
-# 读取CWRU数据
+# Ler dados CWRU
 #data, labels = CWRU_work_condition_data_4class(frame_size, step, data_size, CWRU_work_condition_3_path_list)
-# 读取gear数据
+# ler dados da engrenagem
 data, labels = gear_work_condition_data_6class(frame_size, step, data_size, gear_work_condition_2_path_list)
 
-# 标准化
+# estandardização
 data = StandardScaler().fit_transform(data)
 # reshape
 #data = data.reshape((-1, frame_size, 1))
@@ -186,10 +186,10 @@ data = StandardScaler().fit_transform(data)
 #model = load_model('cnn_gearbox_model_50.h5')
 model = load_model('mlp_gearbox_model_50.h5')
 
-# 预测
+# prever
 predict = model.predict(data, batch_size=1, verbose=1)
 correct_num = 0
-confuse_mat = np.array(np.zeros((class_num, class_num)))    # 混淆矩阵
+confuse_mat = np.array(np.zeros((class_num, class_num)))    # matriz de confusão
 for i in range(predict.shape[0]):
     indexpr = np.where(predict[i, :] == np.max(predict[i, :]))
     indextest = np.where(labels[i, :] == np.max(labels[i, :]))

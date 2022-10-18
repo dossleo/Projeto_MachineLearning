@@ -13,7 +13,7 @@ from sklearn.cross_validation import train_test_split
 from sklearn.model_selection import KFold
 import time
 
-# 4分类工况
+# 4 condições de classificação
 def work_condition_data_4class(frame_size, step, data_size, path_list):
     ball, inner, outer_cen, normal = [], [], [], []
     work1 = np.loadtxt('./data/' + path_list[0])
@@ -34,7 +34,7 @@ def work_condition_data_4class(frame_size, step, data_size, path_list):
     labels[3 * data_size:, 3] = 1
 
     return data, labels
-# 6分类工况
+# 6 condições de classificação
 def work_condition_data_6class(frame_size, step, data_size, path_list):
     ball, inner, outer_cen, outer_opp, outer_orth, normal = [], [], [], [], [], []
     work1 = np.loadtxt('./data/' + path_list[0])
@@ -61,7 +61,7 @@ def work_condition_data_6class(frame_size, step, data_size, path_list):
     labels[5 * data_size:, 5] = 1
 
     return data, labels
-# CNN基模型
+# Modelo básico da CNN
 def cnn_base_model(x_train, y_train, x_val, y_val, frame_size, class_num, batch_size, split):
     model = Sequential()
     model.add(Conv1D(filters=16, kernel_size=(15), strides=(2), activation='relu', input_shape=(frame_size, 1), padding='same', name='conv_1'))
@@ -96,7 +96,7 @@ def cnn_base_model(x_train, y_train, x_val, y_val, frame_size, class_num, batch_
                         )
 
     return model, history
-# CNN迁移模型
+# Modelo de transferência CNN
 def cnn_transfer_model(x_train, y_train, x_val, y_val, frame_size, class_num, batch_size, split):
     base_model = load_model('cnn_CWRU_model_50.h5')
     #base_model = load_model('cnn_gearbox_model_50.h5')
@@ -105,7 +105,7 @@ def cnn_transfer_model(x_train, y_train, x_val, y_val, frame_size, class_num, ba
     output = Dense(class_num, activation='softmax')(x)
     model = Model(inputs=base_model.input, outputs=output)
     ''''''
-    # 只fine-turning最后一层
+    # Apenas torneamento fino da última camada
     for layer in model.layers[:-3]:
         layer.trainable = False
     for layer in model.layers[-3:]:
@@ -127,7 +127,7 @@ def cnn_transfer_model(x_train, y_train, x_val, y_val, frame_size, class_num, ba
                         #validation_split=split,
                         )
     return model, history
-# MLP基模型
+# Modelo base MLP
 def mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, split):
     la = 0.001
     model = Sequential()
@@ -149,7 +149,7 @@ def mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batc
                         )
 
     return model, history
-# MLP迁移模型
+# Modelo de transferência MLP
 def mlp_transfer_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, split):
     #base_model = load_model('mlp_CWRU_model_50.h5')
     base_model = load_model('mlp_gearbox_model_50.h5')
@@ -227,7 +227,7 @@ data_size = 400
 class_num = 6
 batch_size = 512
 split = 0.2
-# 读取数据
+# ler dados
 #data, labels = work_condition_data_4class(frame_size, step, data_size, work_condition_3_path_list)
 data, labels = work_condition_data_6class(frame_size, step, data_size, work_condition_6_path_list)
 print("work condition 1 total data shape:", data.shape)
@@ -263,9 +263,9 @@ plt.title('Normal')
 plt.show()
 '''
 
-# 10折交叉验证
+# Validação cruzada de 10 vezes
 kf = KFold(n_splits=5, shuffle=True, random_state=2)
-# 训练
+# Comboio
 n = 0
 train_acc_list, val_acc_list, test_acc_list = [], [], []
 time1 = time.clock()
@@ -275,7 +275,7 @@ for train_index, test_index in kf.split(data):
     x_train, y_train = data[train_index], labels[train_index]
     x_test, y_test = data[test_index], labels[test_index]
     print("the number of every class:", np.bincount(np.transpose(np.nonzero(y_train))[:, 1]))
-    # 打乱
+    # chateado
     index = [i for i in range(x_train.shape[0])]
     np.random.shuffle(index)
     x_train = x_train[index]
@@ -283,7 +283,7 @@ for train_index, test_index in kf.split(data):
 
     x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2)
     print("the number of every class:", np.bincount(np.transpose(np.nonzero(y_train))[:, 1]))
-    # 标准化
+    # estandardização
     x_train = StandardScaler().fit_transform(x_train)
     x_test = StandardScaler().fit_transform(x_test)
     x_val = StandardScaler().fit_transform(x_val)
@@ -291,24 +291,24 @@ for train_index, test_index in kf.split(data):
     x_train = x_train.reshape((-1, frame_size, 1))
     x_test = x_test.reshape((-1, frame_size, 1))
     x_val = x_val.reshape((-1, frame_size, 1))
-    # 读取CNN模型
+    # Leia o modelo CNN
     model, history = cnn_transfer_model(x_train, y_train, x_val, y_val, frame_size, class_num, batch_size, split)
     #model, history = cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, split)
-    # 读取MLP模型
+    # Leia o modelo MLP
     #model, history = mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, split)
     #model, history = mlp_transfer_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, split)
 
-    # 输出训练历史信息
+    # Saída de informações do histórico de treinamento
     print("train acc:", history.history['acc'])
     print("val_acc:", history.history['val_acc'])
     #plt.plot(history.history['acc'], label='training acc')
     #plt.plot(history.history['val_acc'], label='val acc')
     #plt.legend()
     #plt.show()
-    # 预测
+    # prever
     predict = model.predict(x_test, batch_size=1, verbose=1)
     correct_num = 0
-    confuse_mat = np.array(np.zeros((class_num, class_num)))    # 混淆矩阵
+    confuse_mat = np.array(np.zeros((class_num, class_num)))    # matriz de confusão
     for i in range(predict.shape[0]):
         indexpr = np.where(predict[i, :] == np.max(predict[i, :]))
         indextest = np.where(y_test[i, :] == np.max(y_test[i, :]))

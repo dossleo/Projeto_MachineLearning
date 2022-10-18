@@ -12,7 +12,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.cross_validation import train_test_split
 import time
 
-# 训练基模型的工况数据
+# Os dados das condições de operação para o modelo de base de treinamento
 def work_data(frame_size, step, data_size, path_list):
     ball_data, inner_data, outer_data, normal_data = [], [], [], []
     ball_fault = np.loadtxt('./data/' + path_list[0])
@@ -33,7 +33,7 @@ def work_data(frame_size, step, data_size, path_list):
     labels[3 * data_size:, 3] = 1
 
     return data, labels
-# CNN基模型
+# Modelo básico da CNN
 def cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split):
     model = Sequential()
     model.add(Conv1D(filters=16, kernel_size=(15), strides=(2), activation='relu', input_shape=(frame_size, 1), padding='same', name='conv_1'))
@@ -70,7 +70,7 @@ def cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batc
         #model.save('cnn_CWRU_model_16filtersize.h5')
 
     return model, history
-# MLP基模型
+# Modelo base MLP
 def mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split):
     la = 0.001
     model = Sequential()
@@ -111,13 +111,13 @@ class_num = 4
 batch_size = 128
 save = True
 split = 0.2
-# 读取数据
+# ler dados
 train_data, labels = work_data(frame_size, step, data_size, k48_drive_4class_path_list)
 print("work condition total data shape:", train_data.shape)
 print("work condition total labels shape:", labels.shape)
-# 划分训练集、测试集
+# Divida o conjunto de treinamento e o conjunto de teste
 x_train, x_test, y_train, y_test = train_test_split(train_data, labels, test_size=0.2)
-# 标准化
+# estandardização
 x_train = StandardScaler().fit_transform(x_train)
 x_test = StandardScaler().fit_transform(x_test)
 # reshape
@@ -127,22 +127,22 @@ print("work condition 1 x_train shape:", x_train.shape)
 print("work condition 1 x_test shape:", x_test.shape)
 
 time1 = time.clock()
-# 训练CNN模型
+# Treinar um modelo CNN
 #model, history = cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
-# 训练MLP模型
+# Treine o modelo MLP
 x_train = x_train.reshape((-1, frame_size))
 x_test = x_test.reshape((-1, frame_size))
 model, history = mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
 time2 = time.clock()
 
-# 输出训练历史信息
+# Saída de informações do histórico de treinamento
 print("acc:", history.history['acc'])
 print("val_acc:", history.history['val_acc'])
 
-# 预测
+# prever
 predict = model.predict(x_test, batch_size=1, verbose=0)
 correct_num = 0
-confuse_mat = np.array(np.zeros((class_num, class_num)))    # 混淆矩阵
+confuse_mat = np.array(np.zeros((class_num, class_num)))    # matriz de confusão
 for i in range(predict.shape[0]):
     indexpr = np.where(predict[i, :] == np.max(predict[i, :]))
     indextest = np.where(y_test[i, :] == np.max(y_test[i, :]))
