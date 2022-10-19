@@ -1,3 +1,4 @@
+#%%
 import pandas as pd
 import numpy as np
 from keras.models import Sequential, load_model
@@ -9,30 +10,70 @@ import matplotlib.pyplot as plt
 from keras.utils import plot_model
 from keras.regularizers import l2
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 import time
+
+#%%
+#---------------------------------------------------------------------
+# Método 1: Retorna duas matrizes
+#           A primeira é matriz de dados brutos
+#           A segunda é matriz de labels
+#---------------------------------------------------------------------
 
 # Os dados das condições de operação para o modelo de base de treinamento
 def work_data(frame_size, step, data_size, path_list):
+
+    #Criando variáveis que irão guardar o vetor de cada defeito
     ball_data, inner_data, outer_data, normal_data = [], [], [], []
-    ball_fault = np.loadtxt('./data/' + path_list[0])
+
+    #Definindo ball_fault
+    ball_fault = np.loadtxt('./data/' + path_list[0]) # path_list é entrada do usuário
+
+    #Definindo inner_race_fault
     inner_race_fault = np.loadtxt('./data/' + path_list[1])
+
+    #Definindo outer_race_center_fault
     outer_race_center_fault = np.loadtxt('./data/' + path_list[2])
+
+    #Definindo dados de funcionamento normal
     normal = np.loadtxt('./data/' + path_list[3])
 
-    for i in range(data_size):
-        ball_data.append(ball_fault[i * step: i * step + frame_size].tolist())
+    #Loop
+    for i in range(data_size): #data_size é entrada do usuário
+        #step é entrada do usuário
+        #ball_data inicialmente é uma lista vazia
+
+        #Adicionando os dados em blocos de tamanho frame_size
+        ball_data.append(ball_fault[i * step: i * step + frame_size].tolist()) 
         inner_data.append(inner_race_fault[i * step: i * step + frame_size].tolist())
         outer_data.append(outer_race_center_fault[i * step: i * step + frame_size].tolist())
         normal_data.append(normal[i * step: i * step + frame_size].tolist())
+
+    #Criando um único vetor concatenando todos os dados
     data = np.concatenate((np.array(ball_data), np.array(inner_data), np.array(outer_data), np.array(normal_data)), axis=0)
+
+    #Criando uma matriz com data_size linhas*4 linhas e 4 colunas
     labels = np.zeros((data_size * 4, 4))
+
+    #Primeiro quartil da matriz, referente a ball_data, primeira coluna
     labels[:data_size, 0] = 1
+
+    #Segundo quartil da matriz, referente a inner_data, segunda coluna
     labels[data_size:2 * data_size, 1] = 1
+
+    #Terceiro quartil da matriz, referente a outer_data, terceira coluna
     labels[2 * data_size:3 * data_size, 2] = 1
+
+    #Quarto quartil da matriz, referente a normal_data, quarta coluna
     labels[3 * data_size:, 3] = 1
 
     return data, labels
+
+#%%
+#---------------------------------------------------------------------
+# Método 2:
+#---------------------------------------------------------------------
+
 # Modelo básico da CNN
 def cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split):
     model = Sequential()
@@ -71,6 +112,13 @@ def cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batc
 
     return model, history
 # Modelo base MLP
+
+#%%
+#---------------------------------------------------------------------
+# Método 3:
+#---------------------------------------------------------------------
+
+# Modelo básico da CNN
 def mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split):
     la = 0.001
     model = Sequential()
@@ -97,13 +145,18 @@ def mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batc
 
     return model, history
 
+#%%
+# Aplicando os Métodos - Parte1: Definindo Parâmetros de Entrada
+#---------------------------------------------------------------------
 
+# Modelo básico da CNN
 k48_drive_4class_path_list = [
     '48k_Drive_End_Bearing_Fault_Data/Ball_Fault/123_1772.csv',
     '48k_Drive_End_Bearing_Fault_Data/Inner_Race_Fault/110_1772.csv',
     '48k_Drive_End_Bearing_Fault_Data/Outer_Race_Fault_Centred_On_Load_Zone/202_1772.csv',
     '48k_Normal_Baseline_Data/98_1772.csv'
 ]
+
 frame_size = 1000
 step = 50
 data_size = 2000
@@ -111,10 +164,20 @@ class_num = 4
 batch_size = 128
 save = True
 split = 0.2
+
+#%%
+# Aplicando os Métodos - Parte2: Aplicando Método 1
+#---------------------------------------------------------------------
+
 # ler dados
 train_data, labels = work_data(frame_size, step, data_size, k48_drive_4class_path_list)
 print("work condition total data shape:", train_data.shape)
 print("work condition total labels shape:", labels.shape)
+
+#%%
+# Aplicando os Métodos - Parte3: Dividindo conjunto de treinamento e conjunto de teste
+#---------------------------------------------------------------------
+
 # Divida o conjunto de treinamento e o conjunto de teste
 x_train, x_test, y_train, y_test = train_test_split(train_data, labels, test_size=0.2)
 # estandardização
@@ -126,18 +189,28 @@ x_test = x_test.reshape((-1, frame_size, 1))
 print("work condition 1 x_train shape:", x_train.shape)
 print("work condition 1 x_test shape:", x_test.shape)
 
-time1 = time.clock()
+
+#%%
+# Aplicando os Métodos - Parte4:
+#---------------------------------------------------------------------
+
+time1 = time.process_time()
 # Treinar um modelo CNN
 #model, history = cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
 # Treine o modelo MLP
 x_train = x_train.reshape((-1, frame_size))
 x_test = x_test.reshape((-1, frame_size))
 model, history = mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
-time2 = time.clock()
+time2 = time.process_time()
 
 # Saída de informações do histórico de treinamento
 print("acc:", history.history['acc'])
 print("val_acc:", history.history['val_acc'])
+
+#%%
+# Aplicando os Métodos - Parte5:
+#---------------------------------------------------------------------
+
 
 # prever
 predict = model.predict(x_test, batch_size=1, verbose=0)
