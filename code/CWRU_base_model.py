@@ -23,20 +23,23 @@ import time
 # Os dados das condições de operação para o modelo de base de treinamento
 def work_data(frame_size, step, data_size, path_list):
 
+    caminho = 'C:/Users/leona/Documents/Projeto_MachineLearning/data/'
+    #caminho = './data/'
+
     #Criando variáveis que irão guardar o vetor de cada defeito
     ball_data, inner_data, outer_data, normal_data = [], [], [], []
 
     #Definindo ball_fault
-    ball_fault = np.loadtxt('./data/' + path_list[0]) # path_list é entrada do usuário
+    ball_fault = np.loadtxt(caminho + path_list[0]) # path_list é entrada do usuário
 
     #Definindo inner_race_fault
-    inner_race_fault = np.loadtxt('./data/' + path_list[1])
+    inner_race_fault = np.loadtxt(caminho + path_list[1])
 
     #Definindo outer_race_center_fault
-    outer_race_center_fault = np.loadtxt('./data/' + path_list[2])
+    outer_race_center_fault = np.loadtxt(caminho + path_list[2])
 
     #Definindo dados de funcionamento normal
-    normal = np.loadtxt('./data/' + path_list[3])
+    normal = np.loadtxt(caminho + path_list[3])
 
     #Loop
     for i in range(data_size): #data_size é entrada do usuário
@@ -191,16 +194,17 @@ print("work condition 1 x_test shape:", x_test.shape)
 
 
 #%%
-# Aplicando os Métodos - Parte4:
+# Aplicando os Métodos - Parte4: Aplicando Método 2 e 3
 #---------------------------------------------------------------------
 
 time1 = time.process_time()
 # Treinar um modelo CNN
-#model, history = cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
+model, history = cnn_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
+
 # Treine o modelo MLP
 x_train = x_train.reshape((-1, frame_size))
 x_test = x_test.reshape((-1, frame_size))
-model, history = mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
+#model, history = mlp_base_model(x_train, y_train, x_test, y_test, frame_size, class_num, batch_size, save, split)
 time2 = time.process_time()
 
 # Saída de informações do histórico de treinamento
