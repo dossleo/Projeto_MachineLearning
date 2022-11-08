@@ -29,8 +29,11 @@ class extract_data():
 
 class label_data():
     def __init__(self,data,label = "normal"):
+        
         self.data = data
         self.label = label
+
+        self.labels = {"normal":0,"outer race":1,"inner race":2,"roller":3}
 
     def LabelData(self):
 
@@ -44,5 +47,7 @@ test = extract_data()
 
 data = test.ExtractData()
 
-test2 = label_data(data)
+test2 = label_data(data,"normal")
 print(test2.LabelData())
+
+# %%
