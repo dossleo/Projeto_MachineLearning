@@ -7,20 +7,22 @@ import os
 
 class extract_data():
     def __init__(self,
-                path = 'C:/Users/leona/Documents/Projeto_MachineLearning/data/MFPT Fault Data Sets/1 - Three Baseline Conditions',
+                path = os.path.join(os.getcwd(), "data", "MFPT Fault Data Sets", "1 - Three Baseline Conditions"),
                 file = 'baseline_1.mat',
                 index_gs = 1):
 
         self.index_gs = index_gs
         self.path = path
         self.file = file
+        self.data = self.mat_to_data(scipy.io.loadmat(os.path.join(self.path, self.file)))
 
-        self.mat = scipy.io.loadmat(self.path + '/' + self.file)
-        self.data = self.mat["bearing"]
-        self.data = self.data[0][0][self.index_gs][:,0]
-
+    def mat_to_data(self, mat):
+        data = mat["bearing"][0]
+        index_gs = data.dtype.names.index('gs')
+        data = data[0][index_gs][:,0]
+        return data
+        
     def ExtractData(self):
-
         return self.data
 
     def PlotExample(self):
@@ -82,4 +84,3 @@ def run_dataframe():
     print(df)
     return(df)
 
-run_dataframe()
