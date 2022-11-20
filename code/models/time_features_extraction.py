@@ -11,17 +11,11 @@ from .general_decorators import logger
 
 class TimeFeatureExtraction():
 
-    def __init__(self,path,filename,column):
+    def __init__(self,data):
         
-        #path=r'database/brutos/2nd_test'
+        self.data = data
 
-        self.path = path
-        # self.filename = '2004.02.12.10.32.39'
-        self.filename = filename
-        self.dataset=pd.read_csv(os.path.join(path, self.filename), sep='\t',header=None)
-
-        self.bearing_no = column
-        self.bearing_data = np.array(self.dataset.iloc[:,self.bearing_no-1])
+        self.bearing_data = np.array(self.data)
 
         self.length = len(self.bearing_data)
 
