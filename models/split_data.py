@@ -23,7 +23,7 @@ def get_data():
 
                 index = 0
                 data = time_features.data
-                sobre_janela = 80
+                sobre_janela = 0
 
                 while index < len(data):
                     splited_data = data[index: index + int(len(data)/16)]
@@ -43,8 +43,7 @@ def get_data():
                     index += int((len(data)/16)*(1-sobre_janela/100))
                     time_features.data = data
 
-    df_data = pd.json_normalize(features_list)
-    print(df_data)
+    return pd.json_normalize(features_list)
 
 if __name__ == "__main__":
     get_data()
