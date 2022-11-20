@@ -7,19 +7,19 @@ from sklearn.model_selection import train_test_split
 class MethodPrepare:
 
 
-    def __init__(self, data:pd.DataFrame, x_columns:list, y_column:str) -> None:
+    def __init__(self, data:pd.DataFrame) -> None:
         self.data = data
-        self.x_data = self.get_x_data(x_columns)
-        self.y_data = self.get_y_data(y_column)
+        self.x_data = self.get_x_data()
+        self.y_data = self.get_y_data()
 
         self.test_size = models.test_size
         self.seed = models.seed
 
-    def get_x_data(self, x_columns:list):
-        return self.data[x_columns]
+    def get_x_data(self):
+        return self.data[models.x_columns]
 
-    def get_y_data(self, y_column:list):
-        return self.data[y_column]
+    def get_y_data(self):
+        return self.data[models.y_column]
 
     def prepare_data(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(

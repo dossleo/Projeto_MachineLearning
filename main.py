@@ -17,17 +17,17 @@ def main(dataframe:pd.DataFrame = pd.DataFrame()):
     score = {}
 
     # Executa a predição
-    classifier = ml_functions.Classifier(data = df_data, x_columns=x_columns, y_column=y_column, classifier=RandomForestClassifier, random_state = seed)
+    classifier = ml_functions.Classifier(data = df_data, classifier=RandomForestClassifier, random_state = seed)
     classifier.run()
     name = classifier.classifier.__class__.__name__
     score[f"Classification Score {name}"] = round(classifier.score * 100,2)
 
-    classifier = ml_functions.Classifier(data = df_data, x_columns=x_columns, y_column=y_column, classifier=KNeighborsClassifier)
+    classifier = ml_functions.Classifier(data = df_data, classifier=KNeighborsClassifier)
     classifier.run()
     name = classifier.classifier.__class__.__name__
     score[f"Classification Score {name}"] = round(classifier.score * 100,2)
 
-    classifier = ml_functions.Classifier(data = df_data, x_columns=x_columns, y_column=y_column, classifier=SVC, random_state = seed)
+    classifier = ml_functions.Classifier(data = df_data, classifier=SVC, random_state = seed)
     classifier.run()
     name = classifier.classifier.__class__.__name__
     score[f"Classification Score {name}"] = round(classifier.score * 100,2)
