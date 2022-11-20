@@ -1,42 +1,43 @@
+import models
 import pandas as pd
-from rich import pretty, print
+from .libs.logger import logger
+import sklearn.ensemble
 from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier, MLPRegressor
-from datetime import datetime
-from .libs import logger
+
+class MethodPrepare:
 
 
-class ModelGenerator:
-
-    def __init__(self, data:pd.DataFrame, test_size:float = 0.25, seed:int = 15) -> None:
+    def __init__(self, data:pd.DataFrame, x_columns:list, y_column:str) -> None:
         self.data = data
-        self.test_size = test_size
-        self.seed = seed
+        self.x_data = self.get_x_data(x_columns)
+        self.y_data = self.get_y_data(y_column)
 
+        self.test_size = models.test_size
+        self.seed = models.seed
+
+    def get_x_data(self, x_columns:list):
+        return self.data[x_columns]
+
+    def get_y_data(self, y_column:list):
+        return self.data[y_column]
 
     def prepare_data(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
-            self.data[["x"]],
-            self.data["y_prob"],
+            self.x_data,
+            self.y_data,
             test_size=self.test_size,
             random_state = self.seed
         )
 
-    def _internal_logger(self, rede, regressao):
-        print(f'[{datetime.today().replace(microsecond=0)}] [red]Realizando testes para o modelo ->[/red] {rede}')
-        print(f"[{datetime.today().replace(microsecond=0)}] [green]A acurácia foi de [/green][blue]%.2f%%" % (regressao.score(self.x_test, self.y_test) * 100))
+class Classifier(MethodPrepare):
 
-
-class MethodMLPRegressor(ModelGenerator):
-
-    def _init_(self, data: pd.DataFrame, test_size: float = 0.25, seed: int = 15) -> None:
-        super()._init_(data, test_size, seed)
+    def __init__(self, data: pd.DataFrame, x_columns: list, y_column: str, classifier:sklearn.ensemble, **kwargs) -> None:
+        self.classifier = classifier(**kwargs)
+        super().__init__(data, x_columns, y_column)
 
     @logger
-    def run(self, rede:tuple):
+    def run(self):
         self.prepare_data()
-        regressao = MLPRegressor(random_state=self.seed, max_iter = 100000, hidden_layer_sizes = rede)
-        regressao.fit(self.x_train,self.y_train)
-        regressao.score(self.x_test, self.y_test)
-        self._internal_logger(rede, regressao)
-        self.prediction = regressao.predict(self.x_test)
+        self.classifier.fit(self.x_train,self.y_train)
+        self.prediction = self.classifier.predict(self.x_test)
+        self.score = self.classifier.score(self.x_test, self.y_test)
