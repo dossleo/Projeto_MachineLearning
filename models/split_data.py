@@ -1,6 +1,7 @@
-from code.models import prepare_files, time_features_extraction
+from models import prepare_files
 import pandas as pd
 import os
+from models import time_features_extraction
 from models.libs.logger import logger
 
 @logger
