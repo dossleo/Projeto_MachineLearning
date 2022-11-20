@@ -5,10 +5,10 @@ from models.libs.logger import logger
 from models.split_data import get_data
 
 @logger
-def main(dataframe:pd.DataFrame == pd.DataFrame()):
+def main(dataframe:pd.DataFrame = pd.DataFrame()):
     df_data = dataframe
 
-    if dataframe == pd.DataFrame():
+    if len(dataframe) == 0:
         file_name = 'OuterRaceFault_1.mat'
         folder_name = '2 - Three Outer Race Fault Conditions'
 
