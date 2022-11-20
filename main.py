@@ -4,7 +4,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from models.libs.logger import logger
-from models.split_data import get_data
 from rich import pretty, print
 
 pretty.install()
@@ -36,5 +35,5 @@ def main(dataframe:pd.DataFrame = pd.DataFrame()):
     return score
 
 if __name__ == "__main__":
-    data = get_data(95)
+    data = data_handle.get_data(95)
     print(main(data))
