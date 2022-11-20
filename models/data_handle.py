@@ -2,7 +2,7 @@ from models import mapped_databases
 import os
 from scipy.io import loadmat
 
-class Extract:
+class Read:
 
     def __init__(self, file_name:str, folder_name:str) -> None:
         self.__check_database(folder_name)
@@ -14,14 +14,11 @@ class Extract:
         if not folder_name in mapped_databases:
             raise NotImplementedError("This database system hasn't been implemented yet")
 
-    def read_mat_data(self):
+    def mat_data(self):
         return loadmat(self.file_path)
-
 
 class Prepare:
 
     def __init__(self, file_name:str, folder_name:str) -> None:
-        self.mat_data = Extract(file_name, folder_name).mat_data
+        self.mat_data = Read(file_name, folder_name).mat_data
         self.data = None
-
-    
