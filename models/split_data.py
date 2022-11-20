@@ -3,8 +3,8 @@ import pandas as pd
 import os
 from models.libs.logger import logger
 
-
-def get_data():
+@logger
+def get_data(sobre_janela = 0):
     mapped_databases = {
         '1 - Three Baseline Conditions': 'normal',
         '2 - Three Outer Race Fault Conditions': 'outer race',
@@ -19,15 +19,11 @@ def get_data():
         for file in os.listdir(dir_path):
             if ".mat" in file:
                 data = prepare_files.extract_data(path = dir_path, file=file).data
-                time_features = time_features_extraction.TimeFeatureExtraction(data)
-
                 index = 0
-                data = time_features.data
-                sobre_janela = 0
 
                 while index < len(data):
                     splited_data = data[index: index + int(len(data)/16)]
-                    time_features.data = splited_data
+                    time_features = time_features_extraction.TimeFeatureExtraction(splited_data)
                     features_list.append({
                         'maximum':time_features.maximum(),
                         'minimum':time_features.minimum(),
@@ -40,8 +36,7 @@ def get_data():
                         'crest_factor':time_features.crest_factor(),
                         'fault': mapped_databases.get(base)
                     })
-                    index += int((len(data)/16)*(1-sobre_janela/100))
-                    time_features.data = data
+                    index += int((len(data)/4)*(1-sobre_janela/100))
 
     return pd.json_normalize(features_list)
 

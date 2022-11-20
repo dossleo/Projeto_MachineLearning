@@ -19,32 +19,32 @@ class TimeFeatureExtraction():
 
         self.length = len(self.bearing_data)
 
-    @logger
+    # @logger
     def maximum(self):
         self.max = np.max(self.bearing_data)        
         return self.max
 
-    @logger
+    # @logger
     def minimum(self):
         self.min = np.min(self.bearing_data)        
         return self.min
 
-    @logger
+    # @logger
     def mean(self):
         self.media = np.mean(self.bearing_data)        
         return self.media
 
-    @logger
+    # @logger
     def standard_deviation(self):
         self.std = np.std(self.bearing_data, ddof = 1)        
         return self.std
 
-    @logger
+    # @logger
     def rms(self):
         self.rms_value = sqrt(sum(n*n for n in self.bearing_data)/self.length)        
         return self.rms_value 
 
-    @logger
+    # @logger
     def skewness(self):
         self.n = len(self.bearing_data)
         self.third_moment = np.sum((self.bearing_data - np.mean(self.bearing_data))**3) / self.length
@@ -53,7 +53,7 @@ class TimeFeatureExtraction():
 
         return self.skew
 
-    @logger
+    # @logger
     def kurtosis(self):
         self.n = len(self.bearing_data)
         self.fourth_moment = np.sum((self.bearing_data - np.mean(self.bearing_data))**4) / self.n
@@ -62,19 +62,19 @@ class TimeFeatureExtraction():
 
         return self.kurt
 
-    @logger
+    # @logger
     def crest_factor(self):
         self.cf = self.max/self.rms_value
 
         return self.cf
 
-    @logger
+    # @logger
     def form_factor(self):
         self.ff = self.rms_value/self.media
 
         return self.ff
 
-    @logger
+    # @logger
     def data_visualization(self):
         df1 = pd.read_csv("C:/Users/leona/Documents/ProjetoFinal_LeonardoPacheco_UFRJ_LAVI/database/Tratados/Time_feature_matrix_Bearing_1_Test_2.csv")
         df1 = pd.read_csv("C:/Users/leona/Documents/ProjetoFinal_LeonardoPacheco_UFRJ_LAVI/database/Tratados/Time_feature_matrix_Bearing_1_Test_2.csv",index_col='Unnamed: 0')
@@ -102,7 +102,7 @@ class TimeFeatureExtraction():
             plt.title(col)
             plt.show()
         
-    @logger
+    # @logger
     def execute_time_features(self):
         path = self.path
         self.Time_feature_matrix=pd.DataFrame()
