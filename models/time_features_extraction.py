@@ -6,7 +6,7 @@ import pandas as pd
 import os
 import glob
 from math import sqrt
-from .general_decorators import logger
+from ..code.models.general_decorators import logger
 
 
 class TimeFeatureExtraction():
