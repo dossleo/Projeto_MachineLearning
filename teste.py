@@ -5,6 +5,6 @@ pretty.install
 
 # data = data_handle.get_data()
 
-extractor = data_tools.ExtractData()
-print(extractor.run())
-breakpoint()
+if __name__ == "__main__":
+    data = data_tools.DataGenerator().run()
+    print(data)

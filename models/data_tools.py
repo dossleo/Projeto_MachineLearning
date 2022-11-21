@@ -2,9 +2,10 @@ import numpy as np
 from math import sqrt
 import os
 from scipy.io import loadmat
-from models import mapped_databases, time_window, overlap, frequency_rate_dict
+import models
+import pandas as pd
 
-class TimeFeature():
+class TimeFeatures():
 
     def __init__(self,data):
         self.bearing_data = np.array(data)
@@ -54,12 +55,13 @@ class TimeFeature():
         return self.ff
 
 
-class Data:
+class DataGenerator:
 
     BASE_DIR = os.path.join(os.getcwd(), "data", "MFPT Fault Data Sets")
 
     def __init__(self) -> None:
         self.files_list = self.get_file_list()
+        self.data = None
         self.data_list = []
         self.data_json = []
 
@@ -67,7 +69,7 @@ class Data:
         return os.path.join(self.BASE_DIR, folder_name, file_name)
 
     def get_file_list(self) -> list:
-        folders = mapped_databases.keys()
+        folders = models.mapped_databases.keys()
         files_path_list = []
         for folder in folders:
             files = os.listdir(os.path.join(self.BASE_DIR, folder))
@@ -82,21 +84,38 @@ class Data:
 
     def split(self, fault:str):
         index = 0
+        self.data_list = []
         data = self.data
-        incrementer = (time_window-time_window*overlap)*frequency_rate_dict.get(fault)
+        overlap = models.overlap/100
+        incrementer = int((models.time_window-models.time_window*overlap)*models.frequency_rate_dict.get(fault))
 
         while index < len(data):
-            self.data_list.extend(data[index:index+incrementer])
+            self.data_list.append(data[index:index+incrementer])
             index += incrementer
         index -= incrementer
-        self.data_list.extend(data[index:len(data)])
+        self.data_list.append(data[index:len(data)])
 
-    def concatenate(self):
-        pass
-    
-    def handle(self):
+    def increment_data_json(self, fault: str) -> pd.DataFrame:
+        for data in self.data_list:
+            time_features = TimeFeatures(data)
+            self.data_json.append({
+                'maximum':time_features.maximum(),
+                'minimum':time_features.minimum(),
+                'mean':time_features.mean(),
+                'standard_deviation':time_features.standard_deviation(),
+                'rms':time_features.rms(),
+                'skewness':time_features.skewness(),
+                'kurtosis':time_features.kurtosis(),
+                'form_factor':time_features.form_factor(),
+                'crest_factor':time_features.crest_factor(),
+                'fault': fault
+            })
+
+    def run(self):
         for file in self.files_list:
-            fault = mapped_databases.get(file.split("\\")[-2])
+            print(file)
+            fault = models.mapped_databases.get(file.split("\\")[-2])
             self.read(file)
             self.split(fault)
-            breakpoint()
+            self.increment_data_json(fault)
+        return pd.json_normalize(self.data_json)
