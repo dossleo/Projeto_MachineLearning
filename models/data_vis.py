@@ -1,10 +1,13 @@
 from matplotlib import pyplot as plt
 import numpy as np
+<<<<<<< Updated upstream
 from . import data_handle
+=======
+>>>>>>> Stashed changes
 import seaborn as sns
+from models import faults, frequency_rate_dict
+from pandas import DataFrame
 
-frequency_rate_dict = {"normal":97656,"outer race": 97656,"inner race": 48828}
-faults = ["normal","outer race","inner race"]
 features = ["maximum","minimum","mean","standard_deviation","rms","skewness","kurtosis","form_factor","crest_factor"]
 
 class raw_data_visualization():
@@ -22,12 +25,11 @@ class raw_data_visualization():
         plt.ylabel("Amplitude [gs]")
         plt.show()
 
-class time_feature_visualization():
-    def __init__(self,dataframe,faults = faults):
+class TimeFeatureVisualization():
+    def __init__(self,dataframe:DataFrame):
         self.df = dataframe
-        faults = faults
-        self.rows = df.shape[0]
-        self.columns = df.shape[1]
+        self.rows = self.df.shape[0]
+        self.columns = self.df.shape[1]
 
     def separete_faults(self):
         dataframe = self.df.copy()
@@ -50,6 +52,7 @@ class time_feature_visualization():
         plt.show()
 
 
+<<<<<<< Updated upstream
 if __name__ == "__main__":
 
     df = data_handle.get_data(0)
@@ -58,3 +61,15 @@ if __name__ == "__main__":
     for i in range(len(features)):
         teste.plot_feature(i)
     print(df)
+=======
+# if __name__ == "__main__":
+#     df = data_handle.get_data(0)
+
+#     teste = TimeFeatureVisualization(df)
+#     for metodo in features:
+#         plot = getattr(teste,f"plot_{metodo}")
+#         plot()
+
+#     breakpoint()
+#     print(df)
+>>>>>>> Stashed changes
