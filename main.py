@@ -11,9 +11,6 @@ pretty.install()
 @logger
 def main(dataframe:pd.DataFrame = pd.DataFrame()):
     df_data = dataframe
-
-    x_columns = ['maximum', 'minimum', 'mean', 'standard_deviation', 'rms', 'skewness', 'kurtosis', 'form_factor', 'crest_factor']
-    y_column = 'fault'
     score = {}
 
     # Executa a predição
