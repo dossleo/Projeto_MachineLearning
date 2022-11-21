@@ -2,10 +2,9 @@ from matplotlib import pyplot as plt
 import numpy as np
 from . import data_handle
 import seaborn as sns
-from models import faults, frequency_rate_dict
+from models import faults, frequency_rate_dict, x_columns
 from pandas import DataFrame
 
-features = ["maximum","minimum","mean","standard_deviation","rms","skewness","kurtosis","form_factor","crest_factor"]
 
 class raw_data_visualization():
     def __init__(self,raw_data,frequency_rate = frequency_rate_dict["normal"]):
@@ -27,6 +26,7 @@ class TimeFeatureVisualization():
         self.df = dataframe
         self.rows = self.df.shape[0]
         self.columns = self.df.shape[1]
+        self.features = x_columns
 
     def separete_faults(self):
         dataframe = self.df.copy()
@@ -40,13 +40,17 @@ class TimeFeatureVisualization():
         self.separete_faults()
 
         for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
+            plt.plot(range((defeito[self.features[index]].shape[0])),defeito[self.features[index]])
         plt.legend(faults)
         plt.xlabel("Número da Janela Temporal")
         plt.ylabel("Amplitude [gs]")           
-        plt.title(features[index])
+        plt.title(self.features[index])
     
         plt.show()
+    
+    def plot_all(self):
+        for i in range(len(self.features)):
+            self.plot_feature(i)
 
 
 if __name__ == "__main__":
@@ -54,6 +58,4 @@ if __name__ == "__main__":
     df = data_handle.get_data(0)
 
     teste = TimeFeatureVisualization(df)
-    for i in range(len(features)):
-        teste.plot_feature(i)
-    print(df)
+    teste.plot_all()

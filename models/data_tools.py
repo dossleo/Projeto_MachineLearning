@@ -113,7 +113,6 @@ class DataGenerator:
 
     def run(self):
         for file in self.files_list:
-            print(file)
             fault = models.mapped_databases.get(file.split("\\")[-2])
             self.read(file)
             self.split(fault)

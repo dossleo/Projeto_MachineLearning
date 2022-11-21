@@ -31,9 +31,9 @@ class MethodPrepare:
 
 class Classifier(MethodPrepare):
 
-    def __init__(self, data: pd.DataFrame, x_columns: list, y_column: str, classifier:sklearn.ensemble, **kwargs) -> None:
+    def __init__(self, data: pd.DataFrame, classifier:sklearn.ensemble, **kwargs) -> None:
         self.classifier = classifier(**kwargs)
-        super().__init__(data, x_columns, y_column)
+        super().__init__(data)
 
     @logger
     def run(self):

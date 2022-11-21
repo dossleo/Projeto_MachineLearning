@@ -1,5 +1,6 @@
 from models import ml_functions, data_handle, seed
-import pandas as pd
+from models.data_tools import DataGenerator
+from models.data_vis import TimeFeatureVisualization
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -9,8 +10,13 @@ from rich import pretty, print
 pretty.install()
 
 @logger
-def main(dataframe:pd.DataFrame = pd.DataFrame()):
-    df_data = dataframe
+def main():
+    # Criando as entradas
+    df_data = DataGenerator().run()
+
+    time_feature_visualization = TimeFeatureVisualization(df_data)
+    time_feature_visualization.plot_all()
+    # Criando um dicionario que compara as scores
     score = {}
 
     # Executa a predição
@@ -32,5 +38,4 @@ def main(dataframe:pd.DataFrame = pd.DataFrame()):
     return score
 
 if __name__ == "__main__":
-    data = data_handle.get_data(95)
-    print(main(data))
+    print(main())
