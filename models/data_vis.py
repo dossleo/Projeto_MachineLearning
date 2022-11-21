@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
-import data_handle
+from . import data_handle
 import seaborn as sns
 
 frequency_rate_dict = {"normal":97656,"outer race": 97656,"inner race": 48828}
@@ -49,11 +49,12 @@ class time_feature_visualization():
     
         plt.show()
 
-df = data_handle.get_data(0)
 
-teste = time_feature_visualization(df)
-for i in range(len(features)):
-    teste.plot_feature(i)
+if __name__ == "__main__":
 
-breakpoint()
-print(df)
+    df = data_handle.get_data(0)
+
+    teste = time_feature_visualization(df)
+    for i in range(len(features)):
+        teste.plot_feature(i)
+    print(df)
