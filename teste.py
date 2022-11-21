@@ -8,7 +8,5 @@ pretty.install
 if __name__ == "__main__":
     data = data_tools.DataGenerator().run()
     time_feature_visualization = data_vis.TimeFeatureVisualization(data)
-    breakpoint()
-    # for metodo in features:
-    #     plot = getattr(teste,f"plot_{metodo}")
-    #     plot()
+    for i in range(len(data_vis.features)):
+        time_feature_visualization.plot_feature(i)

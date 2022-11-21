@@ -14,8 +14,8 @@ frequency_rate_dict = {
     "outer race": 97656,
     "inner race": 48828
 }
-time_window = 1
-overlap = 80
+time_window = 2
+overlap = 95
 
 # General Machine Learning Parameters
 seed = 30
