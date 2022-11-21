@@ -1,4 +1,4 @@
-from models import data_handle, data_tools
+from models import data_vis, data_tools
 from rich import pretty, print
 
 pretty.install
@@ -7,4 +7,8 @@ pretty.install
 
 if __name__ == "__main__":
     data = data_tools.DataGenerator().run()
-    print(data)
+    time_feature_visualization = data_vis.TimeFeatureVisualization(data)
+    breakpoint()
+    # for metodo in features:
+    #     plot = getattr(teste,f"plot_{metodo}")
+    #     plot()
