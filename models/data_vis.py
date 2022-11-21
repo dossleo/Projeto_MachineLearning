@@ -37,133 +37,23 @@ class time_feature_visualization():
 
         self.df_defeitos = [df_normal,df_outer,df_inner]
 
-    def plot_maximum(self,index = 0):
+    def plot_feature(self,index = 0):
         self.separete_faults()
 
         for defeito in self.df_defeitos:
             plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
         plt.legend(faults)
         plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
+        plt.ylabel("Amplitude [gs]")           
         plt.title(features[index])
     
         plt.show()
-
-    
-    def plot_minimum(self,index = 1):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-    def plot_mean(self,index = 2):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-    def plot_standard_deviation(self,index = 3):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-
-    def plot_rms(self,index = 4):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-
-    def plot_skewness(self,index = 5):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-    def plot_kurtosis(self,index = 6):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-    def plot_form_factor(self,index = 7):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-
-    def plot_crest_factor(self,index = 8):
-        self.separete_faults()
-
-        for defeito in self.df_defeitos:
-            plt.plot(range((defeito[features[index]].shape[0])),defeito[features[index]])
-        plt.legend(faults)
-        plt.xlabel("Número da Janela Temporal")
-        plt.ylabel("Aceleração [gs]")           
-        plt.title(features[index])
-    
-        plt.show()
-
-   
 
 df = data_handle.get_data(0)
 
 teste = time_feature_visualization(df)
-for metodo in features:
-    plot = getattr(teste,f"plot_{metodo}")
-    plot()
+for i in range(len(features)):
+    teste.plot_feature(i)
 
 breakpoint()
 print(df)
