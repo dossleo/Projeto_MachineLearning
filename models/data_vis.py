@@ -1,9 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
-<<<<<<< Updated upstream
 from . import data_handle
-=======
->>>>>>> Stashed changes
 import seaborn as sns
 from models import faults, frequency_rate_dict
 from pandas import DataFrame
@@ -52,24 +49,11 @@ class TimeFeatureVisualization():
         plt.show()
 
 
-<<<<<<< Updated upstream
 if __name__ == "__main__":
 
     df = data_handle.get_data(0)
 
-    teste = time_feature_visualization(df)
+    teste = TimeFeatureVisualization(df)
     for i in range(len(features)):
         teste.plot_feature(i)
     print(df)
-=======
-# if __name__ == "__main__":
-#     df = data_handle.get_data(0)
-
-#     teste = TimeFeatureVisualization(df)
-#     for metodo in features:
-#         plot = getattr(teste,f"plot_{metodo}")
-#         plot()
-
-#     breakpoint()
-#     print(df)
->>>>>>> Stashed changes
