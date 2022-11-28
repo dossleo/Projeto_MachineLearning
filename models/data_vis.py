@@ -4,20 +4,32 @@ import seaborn as sns
 from models import faults, frequency_rate_dict, x_columns
 from pandas import DataFrame
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import os
+
+def create_images_dir():
+    dir_path = os.path.join('data/images')
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+    return dir_path
+
+BASE_PATH = create_images_dir()
+
 
 class RawVisualization():
-    def __init__(self,raw_data,frequency_rate = frequency_rate_dict["normal"]):
-        self.raw_data = raw_data
-        frequency_rate = frequency_rate
+    def __init__(self,raw_data,fault):
 
+        self.raw_data = raw_data
+        self.fault = fault
+        frequency_rate = frequency_rate_dict.get(fault)
         self.N = len(self.raw_data)
         self.tempo_total = self.N/frequency_rate
 
-    def tempo_amplitude(self):
+    def plt_raw_data(self):
         self.vetor_tempo = np.linspace(0,self.tempo_total,self.N)
         plt.plot(self.vetor_tempo,self.raw_data)
-        plt.title("Dados Brutos")
+        plt.title(f"Dados Brutos - {self.fault}")
         plt.ylabel("Amplitude [gs]")
+        plt.savefig(F"{BASE_PATH}/raw_data.png")
         plt.show()
 
 class TimeFeatureVisualization():
@@ -44,7 +56,7 @@ class TimeFeatureVisualization():
         plt.xlabel("Número da Janela Temporal")
         plt.ylabel("Amplitude [gs]")           
         plt.title(self.features[index])
-    
+        plt.savefig(F"{BASE_PATH}/{self.features[index]}.png")
         plt.show()
     
     def plot_all(self):

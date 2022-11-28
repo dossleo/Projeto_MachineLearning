@@ -62,6 +62,7 @@ class DataGenerator:
     def __init__(self) -> None:
         self.files_list = self.get_file_list()
         self.data = None
+        self.fault = None
         self.data_list = []
         self.data_json = []
 
@@ -114,6 +115,7 @@ class DataGenerator:
     def run(self):
         for file in self.files_list:
             fault = models.mapped_databases.get(file.split("\\")[-2])
+            self.fault = fault
             self.read(file)
             self.split(fault)
             self.increment_data_json(fault)

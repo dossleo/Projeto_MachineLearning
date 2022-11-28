@@ -1,6 +1,6 @@
 from models import ml_functions, seed
 from models.data_tools import DataGenerator
-from models.data_vis import TimeFeatureVisualization
+from models.data_vis import TimeFeatureVisualization, RawVisualization
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -12,7 +12,12 @@ pretty.install()
 @logger
 def main():
     # Criando as entradas
-    df_data = DataGenerator().run()
+    data_generator = DataGenerator()
+    df_data = data_generator.run()
+    
+    raw_data = data_generator.data
+    fault = data_generator.fault
+    RawVisualization(raw_data, fault).plt_raw_data()
 
     # Visualizando os gráficos dos dados de entrada
     time_feature_visualization = TimeFeatureVisualization(df_data)
