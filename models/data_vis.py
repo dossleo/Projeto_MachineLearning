@@ -3,7 +3,7 @@ import numpy as np
 import seaborn as sns
 from models import faults, frequency_rate_dict, x_columns
 from pandas import DataFrame
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import ConfusionMatrixDisplay
 import os
 
 def create_images_dir():
@@ -63,11 +63,23 @@ class TimeFeatureVisualization():
         for i in range(len(self.features)):
             self.plot_feature(i)
 
-# class PostProcessing():
+class PostProcessing():
 
-#     def __init__(self, classifier) -> None:
-#         self.confusion_matrix = confusion_matrix(classifier, classifier, classifier.classes_)
-#         pass
+    def __init__(self, classifier, method_name) -> None:
+        self.classifier = classifier
+        self.title = method_name
+        pass
 
-#     def plot_confusion_matrix(self):
-#         ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
+    def plot_confusion_matrix(self):
+        disp = ConfusionMatrixDisplay.from_estimator(
+            self.classifier.fit_classifier,
+            self.classifier.x_test,
+            self.classifier.y_test,
+            display_labels=faults,
+            cmap=plt.cm.Blues,
+            normalize='true',
+        )
+        disp.ax_.set_title(f"Matriz de Confusão - {self.title}")
+        plt.savefig(F"{BASE_PATH}/{self.title}.png")
+
+        plt.show()

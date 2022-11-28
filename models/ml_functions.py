@@ -36,6 +36,6 @@ class Classifier(MethodPrepare):
 
     def run(self):
         self.prepare_data()
-        self.classifier.fit(self.x_train,self.y_train)
+        self.fit_classifier = self.classifier.fit(self.x_train,self.y_train)
         self.prediction = self.classifier.predict(self.x_test)
         self.score = self.classifier.score(self.x_test, self.y_test)
