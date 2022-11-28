@@ -15,13 +15,13 @@ def main():
     data_generator = DataGenerator()
     df_data = data_generator.run()
     
-    # raw_data = data_generator.data
-    # fault = data_generator.fault
-    # RawVisualization(raw_data, fault).plt_raw_data()
+    raw_data = data_generator.data
+    fault = data_generator.fault
+    RawVisualization(raw_data, fault).plt_raw_data()
 
-    # # Visualizando os gráficos dos dados de entrada
-    # time_feature_visualization = TimeFeatureVisualization(df_data)
-    # time_feature_visualization.plot_all()
+    # Visualizando os gráficos dos dados de entrada
+    time_feature_visualization = TimeFeatureVisualization(df_data)
+    time_feature_visualization.plot_all()
 
     # Criando um dicionario que compara as scores
     score = {}
