@@ -1,6 +1,5 @@
 from matplotlib import pyplot as plt
 import numpy as np
-from . import data_handle
 import seaborn as sns
 from models import faults, frequency_rate_dict, x_columns
 from pandas import DataFrame
@@ -51,11 +50,3 @@ class TimeFeatureVisualization():
     def plot_all(self):
         for i in range(len(self.features)):
             self.plot_feature(i)
-
-
-if __name__ == "__main__":
-
-    df = data_handle.get_data(0)
-
-    teste = TimeFeatureVisualization(df)
-    teste.plot_all()

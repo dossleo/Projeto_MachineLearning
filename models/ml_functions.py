@@ -1,6 +1,5 @@
 import models
 import pandas as pd
-from .libs.logger import logger
 import sklearn.ensemble
 from sklearn.model_selection import train_test_split
 
@@ -35,7 +34,6 @@ class Classifier(MethodPrepare):
         self.classifier = classifier(**kwargs)
         super().__init__(data)
 
-    @logger
     def run(self):
         self.prepare_data()
         self.classifier.fit(self.x_train,self.y_train)
