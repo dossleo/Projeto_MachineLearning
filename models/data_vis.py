@@ -3,9 +3,9 @@ import numpy as np
 import seaborn as sns
 from models import faults, frequency_rate_dict, x_columns
 from pandas import DataFrame
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-
-class raw_data_visualization():
+class RawVisualization():
     def __init__(self,raw_data,frequency_rate = frequency_rate_dict["normal"]):
         self.raw_data = raw_data
         frequency_rate = frequency_rate
@@ -50,3 +50,12 @@ class TimeFeatureVisualization():
     def plot_all(self):
         for i in range(len(self.features)):
             self.plot_feature(i)
+
+# class PostProcessing():
+
+#     def __init__(self, classifier) -> None:
+#         self.confusion_matrix = confusion_matrix(classifier, classifier, classifier.classes_)
+#         pass
+
+#     def plot_confusion_matrix(self):
+#         ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
