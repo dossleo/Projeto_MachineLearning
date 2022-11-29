@@ -5,6 +5,7 @@ from models import faults, frequency_rate_dict, x_columns
 from pandas import DataFrame
 from sklearn.metrics import ConfusionMatrixDisplay
 import os
+from numpy import arange
 
 def create_images_dir():
     dir_path = os.path.join('data/images')
@@ -82,4 +83,14 @@ class PostProcessing():
         disp.ax_.set_title(f"Matriz de Confusão - {self.title}")
         plt.savefig(F"{BASE_PATH}/{self.title}.png")
 
+        plt.show()
+
+    @classmethod
+    def plot_score(self, score):
+        ax = sns.barplot(x=arange(len(score)), y=list(score.values()), hue=list(score.keys()), dodge=False)
+        for i in ax.containers:
+            ax.bar_label(i,)
+        plt.title("Comapração entre a acurácia dos algoritmos")
+        plt.legend(loc='lower right', fontsize='x-small')
+        plt.savefig(F"{BASE_PATH}/score_comparations.png")
         plt.show()
