@@ -100,16 +100,16 @@ class DataGenerator:
         for data in self.data_list:
             time_features = TimeFeatures(data)
             self.data_json.append({
-                'maximum':time_features.maximum(),
-                'minimum':time_features.minimum(),
-                'mean':time_features.mean(),
-                'standard_deviation':time_features.standard_deviation(),
-                'rms':time_features.rms(),
-                'skewness':time_features.skewness(),
-                'kurtosis':time_features.kurtosis(),
-                'form_factor':time_features.form_factor(),
-                'crest_factor':time_features.crest_factor(),
-                'fault': fault
+                'maximum':np.abs(time_features.maximum()),
+                'minimum':np.abs(time_features.minimum()),
+                'mean':np.abs(time_features.mean()),
+                'standard_deviation':np.abs(time_features.standard_deviation()),
+                'rms':np.abs(time_features.rms()),
+                'skewness':np.abs(time_features.skewness()),
+                'kurtosis':np.abs(time_features.kurtosis()),
+                'form_factor':np.abs(time_features.form_factor()),
+                'crest_factor':np.abs(time_features.crest_factor()),
+                'fault':fault
             })
 
     def run(self):
