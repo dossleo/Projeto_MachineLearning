@@ -1,11 +1,16 @@
-from matplotlib import pyplot as plt
+import os
+
+import graphviz
 import numpy as np
 import seaborn as sns
-from models import faults, frequency_rate_dict, x_columns
+from matplotlib import pyplot as plt
+from numpy import arange
 from pandas import DataFrame
 from sklearn.metrics import ConfusionMatrixDisplay
-import os
-from numpy import arange
+from sklearn.tree import export_graphviz
+
+from models import faults, frequency_rate_dict, x_columns
+
 
 def create_images_dir():
     dir_path = os.path.join('data/images')
@@ -69,7 +74,6 @@ class PostProcessing():
     def __init__(self, classifier, method_name) -> None:
         self.classifier = classifier
         self.title = method_name
-        pass
 
     def plot_confusion_matrix(self):
         disp = ConfusionMatrixDisplay.from_estimator(
@@ -84,6 +88,18 @@ class PostProcessing():
         plt.savefig(F"{BASE_PATH}/{self.title}.png")
 
         plt.show()
+
+    def plot_decision_tree(self):
+        dot_data = export_graphviz(
+            self.classifier.fit_classifier,
+            filled = True,
+            rounded=True,
+            feature_names = self.classifier.x_columns,
+            class_names = ["normal","outer race","inner race"]
+        )
+        print(self.classifier.x_columns)
+        grafico = graphviz.Source(dot_data, filename="data/images/test.gv", format="png")
+        grafico.view()
 
     @classmethod
     def plot_score(self, score):
