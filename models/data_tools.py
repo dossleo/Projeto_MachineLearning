@@ -109,7 +109,7 @@ class DataGenerator:
                 'kurtosis':time_features.kurtosis(),
                 'form_factor':time_features.form_factor(),
                 'crest_factor':time_features.crest_factor(),
-                'fault': fault
+                'fault':fault
             })
 
     def run(self):
