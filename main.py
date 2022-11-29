@@ -5,8 +5,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC, NuSVC
 from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
 from models.libs.logger import logger
 from rich import pretty, print
+from sklearn.tree import export_graphviz
+import graphviz
 
 pretty.install()
 
@@ -26,6 +29,7 @@ def main():
 
     # Criando um dicionario que compara as scores
     score = {}
+    RandomForestClassifier()
 
     # Executa a predição
     classifier = ml_functions.Classifier(data = df_data, classifier=RandomForestClassifier, random_state = seed)
@@ -54,6 +58,24 @@ def main():
     PostProcessing(classifier, method_name = classifier.classifier.__class__.__name__).plot_confusion_matrix()
 
     PostProcessing.plot_score(score)
+
+
+    classifier = ml_functions.Classifier(data = df_data, classifier=DecisionTreeClassifier, max_depth=10)
+    classifier.run()
+    score[f"{classifier.classifier.__class__.__name__}, "] = round(classifier.score * 100,2)
+    PostProcessing(classifier, method_name = classifier.classifier.__class__.__name__).plot_confusion_matrix()
+
+
+    dot_data = export_graphviz(
+        classifier.fit_classifier,
+        filled = True,
+        rounded=True,
+        feature_names = classifier.x_columns,
+        class_names = ["normal","outer race","inner race"]
+    )
+    grafico = graphviz.Source(dot_data, filename="data/images/test.gv", format="png")
+    grafico.view()
+    breakpoint()
     return score
 
 if __name__ == "__main__":

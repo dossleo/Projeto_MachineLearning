@@ -10,6 +10,7 @@ class MethodPrepare:
         self.data = data
         self.x_data = self.get_x_data()
         self.y_data = self.get_y_data()
+        self.x_columns = models.x_columns
 
         self.test_size = models.test_size
         self.seed = models.seed
