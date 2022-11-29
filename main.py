@@ -22,8 +22,8 @@ def main():
     RawVisualization(raw_data, fault).plt_raw_data()
 
     # Visualizando os gráficos dos dados de entrada
-    time_feature_visualization = TimeFeatureVisualization(df_data)
-    time_feature_visualization.plot_all()
+    # time_feature_visualization = TimeFeatureVisualization(df_data)
+    # time_feature_visualization.plot_all()
 
     # Criando um dicionario que compara as scores
     score = {}
@@ -55,7 +55,7 @@ def main():
     score[f"{classifier.classifier.__class__.__name__}"] = round(classifier.score * 100,2)
     PostProcessing(classifier, method_name = classifier.classifier.__class__.__name__).plot_confusion_matrix()
 
-    classifier = ml_functions.Classifier(data = df_data, classifier=DecisionTreeClassifier)
+    classifier = ml_functions.Classifier(data = df_data, classifier=DecisionTreeClassifier, criterion = "entropy")
     classifier.run()
     DecisionTreeClassifier()
     score[f"{classifier.classifier.__class__.__name__}, "] = round(classifier.score * 100,2)
