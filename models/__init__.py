@@ -22,7 +22,7 @@ overlap = 90
 # General Machine Learning Parameters
 seed = 30
 test_size = 0.25
-x_columns = ['maximum', 'minimum', 'mean', 'standard_deviation', 'rms', 'skewness', 'kurtosis', 'form_factor', 'crest_factor']
+x_columns = ['maximum', 'minimum', 'rms', 'skewness', 'kurtosis', 'form_factor', 'crest_factor'] #, 'mean', 'standard_deviation'
 y_column = 'fault'
 
 os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'

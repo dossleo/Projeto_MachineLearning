@@ -97,7 +97,6 @@ class PostProcessing():
             feature_names = self.classifier.x_columns,
             class_names = ["normal","outer race","inner race"]
         )
-        print(self.classifier.x_columns)
         grafico = graphviz.Source(dot_data, filename="data/images/test.gv", format="png")
         grafico.view()
 
