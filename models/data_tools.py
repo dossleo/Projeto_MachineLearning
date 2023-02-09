@@ -89,8 +89,9 @@ class DataGenerator:
         data = self.data
         overlap = models.overlap/100
         incrementer = int((models.time_window-models.time_window*overlap)*models.frequency_rate_dict.get(fault))
+        janela_pontos = models.time_window*models.frequency_rate_dict.get(fault)
 
-        while index < len(data):
+        while index+janela_pontos < len(data):
             self.data_list.append(data[index:index+incrementer])
             index += incrementer
         index -= incrementer
